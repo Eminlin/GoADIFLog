@@ -1,2 +1,4 @@
 # GoADIFLog
-Parse ADI file like adif.org
+Parse ADI file like [adif.org](https://adif.org)
+
+
