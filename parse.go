@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"path"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/Eminlin/GoADIFLog/tools"
@@ -33,12 +34,33 @@ func Parse(filename string) {
 				fmt.Printf("single is empty \n")
 				continue
 			}
-			dealSingle(single[len(single)-1])
+			dealSingle(v, single[len(single)-1])
 		}
 	}
 }
 
 //dealSingle 处理单个匹配到的内容
-func dealSingle(single string) {
+func dealSingle(line, match string) {
+	//CALL:6
+	temp := strings.Split(match, ":")
+	if len(temp) != 2 {
+		return
+	}
+	// var adfi format.Adfi
+	lower := strings.ToLower(temp[0])
+	if strings.Contains(lower, "station") {
+		getTagData(line, temp)
+	}
+}
 
+func getTagData(line string, matchArray []string) string {
+	typeIndex := strings.Index(line, matchArray[0])
+	//len(STATION_CALLSIGN) + len(":") + len(temp[1]) + len(">")
+	start := typeIndex + len(matchArray[0]) + len(matchArray[1]) + 2
+	len, err := strconv.Atoi(matchArray[1])
+	if err != nil {
+		fmt.Printf("strconv.Atoi error : %s \n", err)
+	}
+	end := start + len
+	return line[start:end]
 }
