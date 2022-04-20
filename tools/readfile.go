@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"io"
 	"os"
+	"strings"
 )
 
 //ReadFileLine 逐行读取文件
@@ -15,6 +16,7 @@ func ReadFileLine(filename string) ([]string, error) {
 	}
 	defer fi.Close()
 	br := bufio.NewReader(fi)
+	findEOR := ""
 	for {
 		line, _, err := br.ReadLine()
 		if err != nil {
@@ -23,7 +25,14 @@ func ReadFileLine(filename string) ([]string, error) {
 			}
 			return temp, err
 		}
-		temp = append(temp, string(line))
+		if strings.Contains(strings.ToLower(string(line)), "eor") {
+			findEOR += strings.Replace(string(line), "\n", "", -1)
+			temp = append(temp, findEOR)
+			findEOR = ""
+		} else {
+			findEOR += strings.Replace(string(line), "\n", "", -1)
+		}
+
 	}
 	return temp, nil
 }
