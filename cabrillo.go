@@ -63,22 +63,22 @@ func (c *cabrillo) dealBaseInfo(v, lineLower string, stationCallsign, oprator *s
 // 123456789012345678901234567890123456789012345678901234567890123456789012345678901
 func (c *cabrillo) dealSingle(line string, cabr *format.CQLog) {
 
-	cabr.Frequency = line[5-1 : 10+1]
-	fre, _ := strconv.Atoi(strings.TrimSpace(cabr.Frequency))
+	cabr.Frequency = strings.TrimSpace(cabr.Frequency)
+	fre, _ := strconv.Atoi(cabr.Frequency)
 	if fre > 0 {
 		cabr.Band = c.freqToBand(fre)
 	}
 
-	cabr.Mode = strings.ToUpper(line[12-1 : 13+1])
+	cabr.Mode = strings.TrimSpace(strings.ToUpper(line[12-1 : 13+1]))
 
-	cabr.QSODate = strings.ReplaceAll(line[15-1:24+1], "-", "")
+	cabr.QSODate = strings.ReplaceAll(strings.TrimSpace(line[15-1:24+1]), "-", "")
 	t, _ := time.Parse("20060102", strings.TrimSpace(cabr.QSODate))
 	cabr.QSODateTimestamp = t.Unix()
 
-	cabr.Call = line[55-1 : 68+1]
+	cabr.Call = strings.TrimSpace(line[55-1 : 68+1])
 	//cabrillo log file missing exchange
 	if len(strings.TrimSpace(cabr.Call)) <= 3 {
-		cabr.Call = strings.ToUpper(line[49-1 : 55+1])
+		cabr.Call = strings.TrimSpace(strings.ToUpper(line[49-1 : 55+1]))
 	}
 
 	cabr.FileName = c.filename
