@@ -16,7 +16,7 @@ func Parse(fileDir string) ([]format.CQLog, error) {
 	filename := path.Base(fileDir)
 	fileSuffix := path.Ext(filename)
 	mode := getFileMode(fileSuffix)
-	if mode == format.UnknowMode || mode == format.CabrilloMode {
+	if mode == format.UnknowMode {
 		return rtn, errors.New("unkown file format")
 	}
 	if mode == format.ADIFMode {
@@ -26,13 +26,13 @@ func Parse(fileDir string) ([]format.CQLog, error) {
 		}
 		return newAdfi(filename).parse(line), nil
 	}
-	// if mode == format.CabrilloMode {
-	// 	line, err := tools.ReadCabrFileLine(fileDir)
-	// 	if err != nil {
-	// 		return rtn, err
-	// 	}
-	// 	return newCabrillo(filename).parse(line), nil
-	// }
+	if mode == format.CabrilloMode {
+		line, err := tools.ReadCabrFileLine(fileDir)
+		if err != nil {
+			return rtn, err
+		}
+		return newCabrillo(filename).parse(line), nil
+	}
 	return rtn, nil
 }
 
