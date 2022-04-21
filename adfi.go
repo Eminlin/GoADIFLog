@@ -2,6 +2,7 @@ package goadiflog
 
 import (
 	"fmt"
+	"path"
 	"regexp"
 	"strconv"
 	"strings"
@@ -80,9 +81,9 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		adfi.StationCallsign = a.getTagData(line, temp)
 	}
 	if strings.Contains(lower, "operator") {
-		adfi.Oprator = a.getTagData(line, temp)
+		adfi.Operator = a.getTagData(line, temp)
 	}
-	adfi.FileName = a.fileName
+	adfi.FileName = path.Base(a.fileName)
 }
 
 //getTagData 获取adif格式tag对应的数据

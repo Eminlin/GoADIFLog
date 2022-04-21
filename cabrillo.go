@@ -32,7 +32,7 @@ func (c *cabrillo) parse(line []string) []format.CQLog {
 			continue
 		}
 		cabr.StationCallsign = stationCallsign
-		cabr.Oprator = oprator
+		cabr.Operator = oprator
 		c.dealSingle(lineLower, &cabr)
 		calog = append(calog, cabr)
 		// fmt.Printf("%+v\n", cabr)
@@ -71,8 +71,8 @@ func (c *cabrillo) dealSingle(line string, cabr *format.CQLog) {
 
 	cabr.Mode = strings.ToUpper(line[12-1 : 13+1])
 
-	cabr.QSODate = line[15-1 : 24+1]
-	t, _ := time.Parse("2006-01-02", strings.TrimSpace(cabr.QSODate))
+	cabr.QSODate = strings.ReplaceAll(line[15-1:24+1], "-", "")
+	t, _ := time.Parse("20060102", strings.TrimSpace(cabr.QSODate))
 	cabr.QSODateTimestamp = t.Unix()
 
 	cabr.Call = line[55-1 : 68+1]
