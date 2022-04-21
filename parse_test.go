@@ -21,7 +21,7 @@ func TestParse(t *testing.T) {
 		// {
 		// 	name: "Version 1.0.9057.0",
 		// 	args: args{
-		// 		filename: "./testFile/B0CRA.adi",
+		// 		fileDir: "./testFile/B0CRA.adi",
 		// 	},
 		// },
 		// {
@@ -30,18 +30,18 @@ func TestParse(t *testing.T) {
 		// 		fileDir: "./testFile/B8CRA2021.ADI",
 		// 	},
 		// },
-		// {
-		// 	name: "HRD Logbook version 6.7.0.30",
-		// 	args: args{
-		// 		filename: "./testFile/2.0/20210505.ADI",
-		// 	},
-		// },
 		{
-			name: "START-OF-LOG: 2.0",
+			name: "HRD Logbook version 6.7.0.30",
 			args: args{
-				fileDir: "./testFile/2.0/BG0ATE.log",
+				fileDir: "./testFile/2.0/20210505.ADI",
 			},
 		},
+		// {
+		// 	name: "START-OF-LOG: 2.0",
+		// 	args: args{
+		// 		fileDir: "./testFile/2.0/BG0ATE.log",
+		// 	},
+		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
