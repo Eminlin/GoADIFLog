@@ -46,6 +46,7 @@ func (a *adfi) parse(line []string) []format.CQLog {
 		}
 		cqlog = append(cqlog, adfi)
 	}
+	fmt.Printf("cqlog: %+v \n", cqlog)
 	return cqlog
 }
 
@@ -57,7 +58,7 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		return
 	}
 	lower := strings.ToLower(temp[0])
-	if strings.Contains(match, "call:") {
+	if strings.Contains(strings.ToLower(match), "call:") {
 		adfi.Call = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "mode") {
