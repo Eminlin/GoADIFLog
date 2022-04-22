@@ -30,18 +30,19 @@ func TestParse(t *testing.T) {
 		// 		fileDir: "./testFile/B8CRA2021.ADI",
 		// 	},
 		// },
-		// {
-		// 	name: "HRD Logbook version 6.7.0.30",
-		// 	args: args{
-		// 		fileDir: "./testFile/2.0/20210505.ADI",
-		// 	},
-		// },
+
 		{
-			name: "test",
+			name: "HRD Logbook version 6.7.0.30",
 			args: args{
-				fileDir: "./testFile/1.0/2021 B7CRA  OP-BD7MCP BH7NGZ BA7JYE BD7KBB .adi",
+				fileDir: "./testFile/2.0/20210505.ADI",
 			},
 		},
+		// {
+		// 	name: "test",
+		// 	args: args{
+		// 		fileDir: "./testFile/1.0/2021 B7CRA  OP-BD7MCP BH7NGZ BA7JYE BD7KBB .adi",
+		// 	},
+		// },
 		// {
 		// 	name: "START-OF-LOG: 2.0",
 		// 	args: args{

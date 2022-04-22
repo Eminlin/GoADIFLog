@@ -74,6 +74,9 @@ func (c *cabrillo) dealSingle(line string, cabr *format.CQLog) {
 	cabr.QSODate = strings.ReplaceAll(strings.TrimSpace(line[15-1:24+1]), "-", "")
 	t, _ := time.Parse("20060102", strings.TrimSpace(cabr.QSODate))
 	cabr.QSODateTimestamp = t.Unix()
+	if t.Unix() < 0 {
+		cabr.QSODateTimestamp = 0
+	}
 
 	cabr.Call = strings.TrimSpace(line[55-1 : 68+1])
 	//cabrillo log file missing exchange

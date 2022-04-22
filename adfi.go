@@ -70,6 +70,9 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		adfi.QSODate = a.getTagData(line, temp)
 		t, _ := time.Parse("20060102", adfi.QSODate)
 		adfi.QSODateTimestamp = t.Unix()
+		if t.Unix() < 0 {
+			adfi.QSODateTimestamp = 0
+		}
 	}
 	if strings.Contains(lower, "freq") {
 		adfi.Frequency = a.getTagData(line, temp)
