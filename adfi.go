@@ -46,7 +46,6 @@ func (a *adfi) parse(line []string) []format.CQLog {
 		}
 		cqlog = append(cqlog, adfi)
 	}
-	fmt.Printf("cqlog: %+v \n", cqlog)
 	return cqlog
 }
 
