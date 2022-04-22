@@ -58,10 +58,10 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 	}
 	lower := strings.ToLower(temp[0])
 	if strings.Contains(match, "call:") {
-		adfi.Call = a.getTagData(line, temp)
+		adfi.Call = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "mode") {
-		adfi.Mode = a.getTagData(line, temp)
+		adfi.Mode = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "band") {
 		adfi.Band = a.getTagData(line, temp)
@@ -75,10 +75,10 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		adfi.Frequency = a.getTagData(line, temp)
 	}
 	if strings.Contains(lower, "station") {
-		adfi.StationCallsign = a.getTagData(line, temp)
+		adfi.StationCallsign = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "operator") {
-		adfi.Operator = a.getTagData(line, temp)
+		adfi.Operator = strings.ToUpper(a.getTagData(line, temp))
 	}
 	adfi.FileName = path.Base(a.fileName)
 }
