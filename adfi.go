@@ -64,7 +64,7 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		adfi.Mode = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "band") {
-		adfi.Band = a.getTagData(line, temp)
+		adfi.Band = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "qso_date") {
 		adfi.QSODate = a.getTagData(line, temp)
