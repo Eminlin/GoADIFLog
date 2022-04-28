@@ -25,6 +25,7 @@ func (a *adfi) parse(line []string) []format.CQLog {
 	var cqlog []format.CQLog
 	for _, v := range line {
 		if v == "" {
+			fmt.Printf("line is empty \n")
 			continue
 		}
 		if !strings.Contains(v, "<") {
@@ -54,6 +55,7 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 	//CALL:6
 	temp := strings.Split(match, ":")
 	if len(temp) != 2 {
+		fmt.Printf("temp is not valid %v \n", temp)
 		return
 	}
 	lower := strings.ToLower(temp[0])
