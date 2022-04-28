@@ -52,14 +52,17 @@ func (a *adfi) parse(line []string) []format.CQLog {
 
 //dealSingle 处理单个匹配到的内容 match: QSO_DATE:8
 func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
-	if match == "EOR" {
+	if strings.ToLower(match) == "eor" || strings.ToLower(match) == "eoh" {
 		return
 	}
 	//CALL:6
 	temp := strings.Split(match, ":")
 	if len(temp) != 2 {
-		fmt.Printf("temp is not valid %v %s\n", temp, a.fileName)
-		return
+		//兼容带D的情况 <QSO_DATE:8:D>20210504
+		if len(temp) != 3 {
+			fmt.Printf("temp is not valid %v %s\n", temp, a.fileName)
+			return
+		}
 	}
 	lower := strings.ToLower(temp[0])
 	if strings.Contains(strings.ToLower(match), "call:") {
@@ -72,7 +75,12 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		adfi.Band = strings.ToUpper(a.getTagData(line, temp))
 	}
 	if strings.Contains(lower, "qso_date") {
-		adfi.QSODate = a.getTagData(line, temp)
+		if len(temp) == 2 {
+			adfi.QSODate = a.getTagData(line, temp)
+		}
+		if len(temp) == 3 {
+			adfi.QSODate = a.getTagDataWithD(line, temp)
+		}
 		t, _ := time.Parse("20060102", adfi.QSODate)
 		adfi.QSODateTimestamp = t.Unix()
 		if t.Unix() < 0 {
@@ -96,6 +104,20 @@ func (a *adfi) getTagData(line string, matchArray []string) string {
 	typeIndex := strings.Index(line, matchArray[0])
 	//len(STATION_CALLSIGN) + len(":") + len(temp[1]) + len(">")
 	start := typeIndex + len(matchArray[0]) + len(matchArray[1]) + 2
+	len, err := strconv.Atoi(matchArray[1])
+	if err != nil {
+		fmt.Printf("strconv.Atoi error : %s \n", err)
+	}
+	end := start + len
+	return line[start:end]
+}
+
+//getTagDataWithD 处理出现的带D的情况
+func (a *adfi) getTagDataWithD(line string, matchArray []string) string {
+	typeIndex := strings.Index(line, matchArray[0])
+	//<QSO_DATE:8:D>20210504
+	//len(QSO_DATE) + len(":") + len(temp[1]) + len(:) + len(D) + len(">")
+	start := typeIndex + len(matchArray[0]) + len(matchArray[1]) + 4
 	len, err := strconv.Atoi(matchArray[1])
 	if err != nil {
 		fmt.Printf("strconv.Atoi error : %s \n", err)
