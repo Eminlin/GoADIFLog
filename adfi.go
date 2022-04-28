@@ -52,10 +52,13 @@ func (a *adfi) parse(line []string) []format.CQLog {
 
 //dealSingle 处理单个匹配到的内容 match: QSO_DATE:8
 func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
+	if match == "EOR" {
+		return
+	}
 	//CALL:6
 	temp := strings.Split(match, ":")
 	if len(temp) != 2 {
-		fmt.Printf("temp is not valid %v \n", temp)
+		fmt.Printf("temp is not valid %v %s\n", temp, a.fileName)
 		return
 	}
 	lower := strings.ToLower(temp[0])
