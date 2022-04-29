@@ -146,7 +146,6 @@ func (a *adfi) getStationCallFromFileName() string {
 	compileRegex := regexp.MustCompile(`b\dcra`)
 	matchArr := compileRegex.FindStringSubmatch(name)
 	if len(matchArr) == 0 {
-		fmt.Printf("getStationCallFromFileName len 0 %s \n", a.fileName)
 		return ""
 	}
 	call := strings.ToUpper(matchArr[0])
