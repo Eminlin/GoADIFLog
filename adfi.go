@@ -93,6 +93,9 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 	if strings.Contains(lower, "station") {
 		adfi.StationCallsign = strings.ToUpper(a.getTagData(line, temp))
 	}
+	if adfi.StationCallsign == "" {
+		adfi.StationCallsign = a.getStationCallFromFileName()
+	}
 	if strings.Contains(lower, "operator") {
 		adfi.Operator = strings.ToUpper(a.getTagData(line, temp))
 	}
@@ -124,4 +127,19 @@ func (a *adfi) getTagDataWithD(line string, matchArray []string) string {
 	}
 	end := start + len
 	return line[start:end]
+}
+
+//getStationCallFromFileName 从文件名获取站台号
+func (a *adfi) getStationCallFromFileName() string {
+	if a.fileName == "" {
+		return ""
+	}
+	name := strings.ToLower(a.fileName)
+	compileRegex := regexp.MustCompile(`b\dcra`)
+	matchArr := compileRegex.FindStringSubmatch(name)
+	if len(matchArr) == 0 {
+		return ""
+	}
+	call := strings.ToUpper(matchArr[0])
+	return call
 }
