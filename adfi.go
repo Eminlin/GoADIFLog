@@ -92,9 +92,9 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 	}
 	if strings.Contains(lower, "station") {
 		adfi.StationCallsign = strings.ToUpper(a.getTagData(line, temp))
-	}
-	if adfi.StationCallsign == "" {
-		adfi.StationCallsign = a.getStationCallFromFileName()
+		if adfi.StationCallsign == "" {
+			adfi.StationCallsign = a.getStationCallFromFileName()
+		}
 	}
 	if strings.Contains(lower, "operator") {
 		adfi.Operator = strings.ToUpper(a.getTagData(line, temp))
