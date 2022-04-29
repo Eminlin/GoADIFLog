@@ -17,7 +17,7 @@ func Parse(fileDir string) ([]format.CQLog, error) {
 	fileSuffix := path.Ext(filename)
 	mode := getFileMode(fileSuffix)
 	if mode == format.UnknowMode {
-		return rtn, errors.New("unkown file format")
+		return rtn, errors.New("unkown file format file:" + filename)
 	}
 	if mode == format.ADIFMode {
 		line, err := tools.ReadADIFFileLine(fileDir)

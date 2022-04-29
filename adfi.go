@@ -132,12 +132,14 @@ func (a *adfi) getTagDataWithD(line string, matchArray []string) string {
 //getStationCallFromFileName 从文件名获取站台号
 func (a *adfi) getStationCallFromFileName() string {
 	if a.fileName == "" {
+		fmt.Printf("fileName is empty \n")
 		return ""
 	}
 	name := strings.ToLower(a.fileName)
 	compileRegex := regexp.MustCompile(`b\dcra`)
 	matchArr := compileRegex.FindStringSubmatch(name)
 	if len(matchArr) == 0 {
+		fmt.Printf("getStationCallFromFileName len 0 %s \n", a.fileName)
 		return ""
 	}
 	call := strings.ToUpper(matchArr[0])
