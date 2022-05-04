@@ -43,20 +43,20 @@ func (a *adfi) parse(line []string) []format.CQLog {
 				fmt.Printf("single is not valid \n")
 				continue
 			}
-			a.dealSingle(v, single[len(single)-1], &adfi)
+			a.dealSingle(v, single, &adfi)
 		}
 		cqlog = append(cqlog, adfi)
 	}
 	return cqlog
 }
 
-//dealSingle 处理单个匹配到的内容 match: QSO_DATE:8
-func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
-	if strings.ToLower(match) == "eor" || strings.ToLower(match) == "eoh" {
+//dealSingle 处理单个匹配到的内容 match: [<CALL:6> CALL:6]
+func (a *adfi) dealSingle(line string, match []string, adfi *format.CQLog) {
+	if strings.ToLower(match[1]) == "eor" || strings.ToLower(match[1]) == "eoh" {
 		return
 	}
 	//CALL:6
-	temp := strings.Split(match, ":")
+	temp := strings.Split(match[1], ":")
 	if len(temp) != 2 {
 		//兼容带D的情况 <QSO_DATE:8:D>20210504
 		if len(temp) != 3 {
@@ -64,25 +64,29 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 			return
 		}
 	}
-	lower := strings.ToLower(temp[0])
-	if strings.Contains(strings.ToLower(match), "call:") {
-		adfi.Call = strings.ToUpper(a.getTagData(line, temp))
+	lower := strings.ToLower(match[1])
+	if strings.Contains(lower, "call:") {
+		adfi.Call = strings.ToUpper(a.getTagData(line, match))
 		return
 	}
-	if strings.Contains(lower, "mode") {
-		adfi.Mode = strings.ToUpper(a.getTagData(line, temp))
+	if strings.Contains(lower, "mode:") {
+		//暂时防止3.0的覆盖
+		if adfi.Mode != "" {
+			return
+		}
+		adfi.Mode = strings.ToUpper(a.getTagData(line, match))
 		return
 	}
-	if strings.Contains(lower, "band") {
-		adfi.Band = strings.ToUpper(a.getTagData(line, temp))
+	if strings.Contains(lower, "band:") {
+		adfi.Band = strings.ToUpper(a.getTagData(line, match))
 		return
 	}
-	if strings.Contains(lower, "qso_date") {
+	if strings.Contains(lower, "qso_date:") {
 		if len(temp) == 2 {
-			adfi.QSODate = a.getTagData(line, temp)
+			adfi.QSODate = a.getTagData(line, match)
 		}
 		if len(temp) == 3 {
-			adfi.QSODate = a.getTagDataWithD(line, temp)
+			adfi.QSODate = a.getTagDataWithD(line, match)
 		}
 		t, _ := time.Parse("20060102", adfi.QSODate)
 		adfi.QSODateTimestamp = t.Unix()
@@ -92,15 +96,15 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 		return
 	}
 	if strings.Contains(lower, "freq") {
-		adfi.Frequency = a.getTagData(line, temp)
+		adfi.Frequency = a.getTagData(line, match)
 		return
 	}
-	if strings.Contains(lower, "station") {
-		adfi.StationCallsign = strings.ToUpper(a.getTagData(line, temp))
+	if strings.Contains(lower, "station_call") {
+		adfi.StationCallsign = strings.ToUpper(a.getTagData(line, match))
 		return
 	}
 	if strings.Contains(lower, "operator") {
-		adfi.Operator = strings.ToUpper(a.getTagData(line, temp))
+		adfi.Operator = strings.ToUpper(a.getTagData(line, match))
 		return
 	}
 	if adfi.StationCallsign == "" {
@@ -109,12 +113,14 @@ func (a *adfi) dealSingle(line, match string, adfi *format.CQLog) {
 	adfi.FileName = path.Base(a.fileName)
 }
 
-//getTagData 获取adif格式tag对应的数据
+//getTagData 获取adif格式tag对应的数据 matchArray: [<CALL:6> CALL:6]
 func (a *adfi) getTagData(line string, matchArray []string) string {
+	//<CALL:6>
 	typeIndex := strings.Index(line, matchArray[0])
-	//len(STATION_CALLSIGN) + len(":") + len(temp[1]) + len(">")
-	start := typeIndex + len(matchArray[0]) + len(matchArray[1]) + 2
-	len, err := strconv.Atoi(matchArray[1])
+	//len("<CALL:6>")
+	start := typeIndex + len(matchArray[0])
+	lenString := strings.Split(matchArray[1], ":")
+	len, err := strconv.Atoi(lenString[1])
 	if err != nil {
 		fmt.Printf("strconv.Atoi error : %s \n", err)
 	}
@@ -126,9 +132,10 @@ func (a *adfi) getTagData(line string, matchArray []string) string {
 func (a *adfi) getTagDataWithD(line string, matchArray []string) string {
 	typeIndex := strings.Index(line, matchArray[0])
 	//<QSO_DATE:8:D>20210504
-	//len(QSO_DATE) + len(":") + len(temp[1]) + len(:) + len(D) + len(">")
-	start := typeIndex + len(matchArray[0]) + len(matchArray[1]) + 4
-	len, err := strconv.Atoi(matchArray[1])
+	//len("<QSO_DATE:8:D>")
+	start := typeIndex + len(matchArray[0])
+	lenString := strings.Split(matchArray[1], ":")
+	len, err := strconv.Atoi(lenString[1])
 	if err != nil {
 		fmt.Printf("strconv.Atoi error : %s \n", err)
 	}

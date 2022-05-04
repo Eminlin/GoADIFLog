@@ -18,37 +18,39 @@ func TestParse(t *testing.T) {
 		wantErr bool
 	}{
 		// TODO: Add test cases.
+
 		// {
-		// 	name: "Version 1.0.9057.0",
-		// 	args: args{
-		// 		fileDir: "./testFile/B0CRA.adi",
-		// 	},
-		// },
-		// {
-		// 	name: "Version 1.0.9057.0 all",
+		// 	name: "正常识别 1.0",
 		// 	args: args{
 		// 		fileDir: "./testFile/B8CRA2021.ADI",
 		// 	},
 		// },
 
+		// {
+		// 	name: "测试没有station_callsign，读文件名",
+		// 	args: args{
+		// 		fileDir: "./testFile/3.0/2021 B2CRA ALL LOG.ADI",
+		// 	},
+		// },
+
+		// {
+		// 	name: "呼号识别错误：N:5>B9",
+		// 	args: args{
+		// 		fileDir: "./testFile/3.0/青海B9CRA_20210505_SELECTED_QSO.adi",
+		// 	},
+		// },
+		// {
+		// 	name: "带D识别 ",
+		// 	args: args{
+		// 		fileDir: "./testFile/3.0/2021 B2CRA ALL LOG.ADI",
+		// 	},
+		// },
 		{
-			name: "HRD Logbook version 6.7.0.30",
+			name: "识别2.0 ",
 			args: args{
 				fileDir: "./testFile/2.0/20210505.ADI",
 			},
 		},
-		// {
-		// 	name: "test",
-		// 	args: args{
-		// 		fileDir: "./testFile/1.0/2021 B7CRA  OP-BD7MCP BH7NGZ BA7JYE BD7KBB .adi",
-		// 	},
-		// },
-		// {
-		// 	name: "START-OF-LOG: 2.0",
-		// 	args: args{
-		// 		fileDir: "./testFile/2.0/BG0ATE.log",
-		// 	},
-		// },
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
