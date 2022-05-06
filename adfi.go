@@ -110,6 +110,14 @@ func (a *adfi) dealSingle(line string, match []string, adfi *format.CQLog) {
 	if adfi.StationCallsign == "" {
 		adfi.StationCallsign = a.getStationCallFromFileName()
 	}
+	if strings.Contains(lower, "time_on") {
+		adfi.TimeOn = a.getTagData(line, match)
+		return
+	}
+	if strings.Contains(lower, "time_off") {
+		adfi.TimeOff = a.getTagData(line, match)
+		return
+	}
 	adfi.FileName = path.Base(a.fileName)
 }
 
