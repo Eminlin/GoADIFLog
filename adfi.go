@@ -25,11 +25,11 @@ func (a *adfi) parse(line []string) []format.CQLog {
 	var cqlog []format.CQLog
 	for _, v := range line {
 		if v == "" {
-			fmt.Printf("line is empty \n")
+			// fmt.Printf("line is empty \n")
 			continue
 		}
 		if !strings.Contains(v, "<") {
-			fmt.Printf("strings not contains < : %s \n", v)
+			// fmt.Printf("strings not contains < : %s \n", v)
 			continue
 		}
 		compileRegex := regexp.MustCompile("<(.*?)>")
@@ -40,7 +40,7 @@ func (a *adfi) parse(line []string) []format.CQLog {
 			//[<RST_RCVD:2> RST_RCVD:2]
 			singleLen := len(single)
 			if singleLen <= 1 {
-				fmt.Printf("single is not valid \n")
+				// fmt.Printf("single is not valid \n")
 				continue
 			}
 			a.dealSingle(v, single, &adfi)
@@ -50,8 +50,9 @@ func (a *adfi) parse(line []string) []format.CQLog {
 	return cqlog
 }
 
-//dealSingle 处理单个匹配到的内容 match: [<CALL:6> CALL:6]
+// dealSingle 处理单个匹配到的内容 match: [<CALL:6> CALL:6]
 func (a *adfi) dealSingle(line string, match []string, adfi *format.CQLog) {
+
 	if strings.ToLower(match[1]) == "eor" || strings.ToLower(match[1]) == "eoh" {
 		return
 	}
@@ -118,10 +119,11 @@ func (a *adfi) dealSingle(line string, match []string, adfi *format.CQLog) {
 		adfi.TimeOff = a.getTagData(line, match)
 		return
 	}
+
 	adfi.FileName = path.Base(a.fileName)
 }
 
-//getTagData 获取adif格式tag对应的数据 matchArray: [<CALL:6> CALL:6]
+// getTagData 获取adif格式tag对应的数据 matchArray: [<CALL:6> CALL:6]
 func (a *adfi) getTagData(line string, matchArray []string) string {
 	//<CALL:6>
 	typeIndex := strings.Index(line, matchArray[0])
@@ -136,7 +138,7 @@ func (a *adfi) getTagData(line string, matchArray []string) string {
 	return line[start:end]
 }
 
-//getTagDataWithD 处理出现的带D的情况
+// getTagDataWithD 处理出现的带D的情况
 func (a *adfi) getTagDataWithD(line string, matchArray []string) string {
 	typeIndex := strings.Index(line, matchArray[0])
 	//<QSO_DATE:8:D>20210504
@@ -151,10 +153,10 @@ func (a *adfi) getTagDataWithD(line string, matchArray []string) string {
 	return line[start:end]
 }
 
-//getStationCallFromFileName 从文件名获取站台号
+// getStationCallFromFileName 从文件名获取站台号
 func (a *adfi) getStationCallFromFileName() string {
 	if a.fileName == "" {
-		fmt.Printf("fileName is empty \n")
+		// fmt.Printf("fileName is empty \n")
 		return ""
 	}
 	name := strings.ToLower(a.fileName)
