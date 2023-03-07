@@ -9,8 +9,8 @@ import (
 	"github.com/Eminlin/GoADIFLog/tools"
 )
 
-//Parse 解析入口
-//fileDir:./testFile/xxx.adi or ./testFile/xxx.log
+// Parse 解析入口
+// fileDir:./testFile/xxx.adi or ./testFile/xxx.log
 func Parse(fileDir string) ([]format.CQLog, error) {
 	var rtn []format.CQLog
 	filename := path.Base(fileDir)
@@ -36,7 +36,16 @@ func Parse(fileDir string) ([]format.CQLog, error) {
 	return rtn, nil
 }
 
-//getFileMode 检查文件后缀格式
+func ParseAdifFromString(adif string) ([]format.CQLog, error) {
+	var rtn []format.CQLog
+	line, err := tools.ReadAdifString(adif)
+	if err != nil {
+		return rtn, err
+	}
+	return newAdfi("").parse(line), nil
+}
+
+// getFileMode 检查文件后缀格式
 func getFileMode(suffix string) int {
 	switch strings.ToLower(suffix) {
 	case ".adi":
