@@ -119,6 +119,10 @@ func (a *adfi) dealSingle(line string, match []string, adfi *format.CQLog) {
 		adfi.TimeOff = a.getTagData(line, match)
 		return
 	}
+	if strings.Contains(lower, "qsl_rcvd") {
+		adfi.QslRcvd = a.getTagData(line, match)
+		return
+	}
 
 	adfi.FileName = path.Base(a.fileName)
 }

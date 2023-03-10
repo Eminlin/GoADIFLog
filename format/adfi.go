@@ -6,7 +6,7 @@ var (
 	CabrilloMode = 2
 )
 
-//CQLog 从日志获取主要的信息
+// CQLog 从日志获取主要的信息
 type CQLog struct {
 	Call             string //被呼 呼号 *
 	Mode             string //模式*
@@ -19,4 +19,5 @@ type CQLog struct {
 	StationCallsign  string //操作台呼号
 	Operator         string //操作员*
 	FileName         string //来源文件
+	QslRcvd          string
 }
